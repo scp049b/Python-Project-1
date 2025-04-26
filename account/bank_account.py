@@ -1,5 +1,6 @@
 from account.transaction import Transaction
 from account.user import User
+import logging
 
 class BankAccount:
     def __init__(self, name="John", email="john@gmail.com", initial_balance=0):
@@ -21,12 +22,11 @@ class BankAccount:
         self.transactions_history.append(Transaction(amount, "deposit"))
 
     def withdraw(self, amount):
-        if not isinstance(amount, (int, float)) or amount <= 0:
-            raise ValueError("Withdrawal amount is invalid!")
         if self.balance - amount < 0:
             raise ValueError("Insufficient Balance!")
         self.balance -= amount
         self.transactions_history.append(Transaction(amount, "withdraw"))
+        logging.info(f"Withdrawal of {amount} successful. Remaining balance: {self.balance}")
 
     def get_balance(self):
         return self.balance

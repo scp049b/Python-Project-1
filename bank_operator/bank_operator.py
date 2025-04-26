@@ -1,5 +1,9 @@
+import logging
 from account.user import User
 from account.bank_account import BankAccount, SavingsAccount, CurrentAccount, StudentAccount
+
+# Configure logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 users = []
 
@@ -8,32 +12,32 @@ def create_user():
     email = input("Enter email: ")
     user = User(name, email)
     if not user.is_valid_email(email):
-        print("Invalid email address!")
+        logging.error("Invalid email address!")
         return
     users.append(user)
-    print(f"User {name} created.\n")
+    logging.info(f"User {name} created.\n")
 
 def list_users():
     if not users:
-        print("No users available.\n")
+        logging.info("No users available.\n")
         return False
     for i, user in enumerate(users):
-        print(f"{i+1}. {user}")
+        logging.info(f"{i+1}. {user}")
     return True
 
 def create_account():
     if not users:  # Check if the users list is empty
-        print("No users available. Please create a user first.\n")
+        logging.info("No users available. Please create a user first.\n")
         return
     try:
         idx = int(input("Select user number: ")) - 1
         if idx < 0 or idx >= len(users):
-            print("Invalid user selection.\n")  # Updated error message
+            logging.error("Invalid user selection.\n")  # Updated error message
             return
-        print("Account Type:")
-        print("1. Savings Account")
-        print("2. Students Account")
-        print("3. Current Account")
+        logging.info("Account Type:")
+        logging.info("1. Savings Account")
+        logging.info("2. Students Account")
+        logging.info("3. Current Account")
         account_choice = int(input("Enter your choice (1, 2, 3): "))
         amount = float(input("Enter initial deposit: "))
 
@@ -44,20 +48,20 @@ def create_account():
         elif account_choice == 3:
             account = CurrentAccount(amount)
         else:
-            print("Invalid choice!")
+            logging.error("Invalid choice!")
             return
 
         users[idx].add_account(account)
-        print(f"{account.get_account_type()} added!\n")
+        logging.info(f"{account.get_account_type()} added!\n")
     except ValueError:
-        print("Invalid input! Please enter a valid number.\n")
+        logging.error("Invalid input! Please enter a valid number.\n")
 
 def deposit_money():
     list_users()
     idx = int(input("Select user: ")) - 1
     user = users[idx]
     for i, acc in enumerate(user.accounts):
-        print(f"{i+1}. Balance: Rs. {acc.get_balance()}")
+        logging.info(f"{i+1}. Balance: Rs. {acc.get_balance()}")
     acc_idx = int(input("Select account: ")) - 1
     amount = float(input("Enter amount to deposit: "))  # Fixed bug
     user.accounts[acc_idx].deposit(amount)
@@ -67,21 +71,21 @@ def withdraw_money():
     idx = int(input("Select user: ")) - 1
     user = users[idx]
     for i, acc in enumerate(user.accounts):
-        print(f"{i+1}. Balance: Rs. {acc.get_balance()}")
+        logging.info(f"{i+1}. Balance: Rs. {acc.get_balance()}")
     acc_idx = int(input("Select account: ")) - 1
     amount = float(input("Enter amount to withdraw: "))
     try:
         user.accounts[acc_idx].withdraw(amount)
-        print("Withdrawal successful.\n")
+        logging.info("Withdrawal successful.\n")
     except ValueError as e:
-        print(f"Error: {e}\n")
+        logging.error(f"Error: {e}\n")
 
 def view_transactions():
     list_users()
     idx = int(input("Select user: ")) - 1
     user = users[idx]
     for i, acc in enumerate(user.accounts):
-        print(f"\n{acc.get_account_type()} {i+1} - Balance: Rs. {acc.get_balance()}")
+        logging.info(f"\n{acc.get_account_type()} {i+1} - Balance: Rs. {acc.get_balance()}")
         for tx in acc.get_transaction_history():
-            print(tx)
+            logging.info(tx)
 
