@@ -2,26 +2,28 @@ from account.transaction import Transaction
 from account.user import User
 
 class BankAccount:
-    def __init__(self,name= "John" ,email= "john@gmail.com", initial_balance=0):
-        if not isinstance(initial_balance , (int, float)) or initial_balance<0:
-            print("Invalid initial balance!")
+    def __init__(self, name="John", email="john@gmail.com", initial_balance=0):
+        if not isinstance(initial_balance, (int, float)) or initial_balance < 0:
+            raise ValueError("Invalid initial balance!")
+        if not name or not email:
+            raise ValueError("A valid user must be provided to create an account!")
         self.balance = initial_balance
         self.transactions_history = []
         self.account_type = "Generic"
         self.user = User(name, email)
 
     def deposit(self, amount):
-        if not isinstance(amount , (int, float)) and  amount <= 0:
-            print("Deposit amount is invalid!")
+        if not isinstance(amount, (int, float)) or amount <= 0:
+            raise ValueError("Deposit amount is invalid!")
         self.balance += amount
         self.transactions_history.append(Transaction(amount, "deposit"))
 
     def withdraw(self, amount):
-        if not isinstance(amount ,(int, float))  and amount <= 0:
-            print("Withdrawal amount is invalid!")
-        if self.balance < amount-100:
-            print("Insufficient Balance!")
-        self.balance += amount
+        if not isinstance(amount, (int, float)) or amount <= 0:
+            raise ValueError("Withdrawal amount is invalid!")
+        if self.balance - amount < 0:
+            raise ValueError("Insufficient Balance!")
+        self.balance -= amount
         self.transactions_history.append(Transaction(amount, "withdraw"))
 
     def get_balance(self):
