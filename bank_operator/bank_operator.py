@@ -8,7 +8,8 @@ def create_user():
     email = input("Enter email: ")
     user = User(name, email)
     if not user.is_valid_email(email):
-        print("Email is invalid!")
+        print("Invalid email address!")
+        return
     users.append(user)
     print(f"User {name} created.\n")
 
