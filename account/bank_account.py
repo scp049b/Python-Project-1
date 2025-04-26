@@ -6,7 +6,9 @@ class BankAccount:
         if not isinstance(initial_balance, (int, float)) or initial_balance < 0:
             raise ValueError("Invalid initial balance!")
         if not name or not email:
-            raise ValueError("A valid user must be provided to create an account!")
+            print("A valid user must be provided to create an account! Redirecting to the main interface...")
+            # Redirect to main interface logic (placeholder)
+            return
         self.balance = initial_balance
         self.transactions_history = []
         self.account_type = "Generic"
